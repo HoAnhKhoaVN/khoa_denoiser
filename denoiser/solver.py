@@ -13,6 +13,7 @@ import time
 
 import torch
 import torch.nn.functional as F
+from utils import knowledge_distillation_loss
 
 from . import augment, distrib, pretrained
 from .enhance import enhance
@@ -145,6 +146,7 @@ class Solver(object):
         for epoch in range(len(self.history), self.epochs):
             # Train one epoch
             self.model.train()
+            self.teacher_model.eval()
             start = time.time()
             logger.info('-' * 70)
             logger.info("Training...")
@@ -218,6 +220,10 @@ class Solver(object):
                 sources = self.augment(sources)
                 noise, clean = sources
                 noisy = noise + clean
+
+            with torch.no_grad():
+                teacher_estimate = self.dteacher_model(noisy)
+            
             estimate = self.dmodel(noisy)
             # apply a loss function after each layer
             with torch.autograd.set_detect_anomaly(True):
@@ -233,6 +239,12 @@ class Solver(object):
                 if self.args.stft_loss:
                     sc_loss, mag_loss = self.mrstftloss(estimate.squeeze(1), clean.squeeze(1))
                     loss += sc_loss + mag_loss
+
+                if self.args.kd_loss:
+                    loss += knowledge_distillation_loss(
+                        student_outputs= estimate.squeeze(1),
+                        teacher_outputs= teacher_estimate.squeeze(1)
+                    )
 
                 # optimize model in training mode
                 if not cross_valid:

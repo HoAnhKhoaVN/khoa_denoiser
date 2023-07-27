@@ -16,6 +16,18 @@ import torch
 
 logger = logging.getLogger(__name__)
 
+def knowledge_distillation_loss(student_outputs, teacher_outputs, T=1.0, alpha=0.5):
+    """
+    Calculate the knowledge distillation loss using KL divergence.
+    :param student_outputs: Outputs of the student model
+    :param teacher_outputs: Outputs of the teacher model
+    :param T: Temperature parameter (default: 1.0)
+    :param alpha: Weight of the KL divergence term (default: 0.5)
+    """
+    
+    kd_loss = nn.KLDivLoss()(nn.functional.log_softmax(student_outputs / T, dim=1),
+                             nn.functional.softmax(teacher_outputs / T, dim=1)) * (alpha * T * T)
+    return kd_loss
 
 def capture_init(init):
     """capture_init.
