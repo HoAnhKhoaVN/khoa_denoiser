@@ -59,6 +59,12 @@ kd_loss: False
 epochs: 500
 batch_size: 64
 
+
+# region KD loss
+kd_t_factor: 1
+kd_loss_factor: 100
+# endregion
+
 # Models
 model: demucs # either demucs or dwave
 demucs:

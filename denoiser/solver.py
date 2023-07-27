@@ -239,10 +239,14 @@ class Solver(object):
                     loss += sc_loss + mag_loss
 
                 if self.args.kd_loss:
-                    loss += knowledge_distillation_loss(
+                    kd_loss = knowledge_distillation_loss(
                         student_outputs= estimate.squeeze(1),
-                        teacher_outputs= teacher_estimate.squeeze(1)
+                        teacher_outputs= teacher_estimate.squeeze(1),
+                        T = self.args.kd_t_factor,
+                        alpha= self.args.kd_loss_factor,
                     )
+                    logger.info(f"===== KD LOSS : {kd_loss} ======")
+                    loss += kd_loss
 
                 # optimize model in training mode
                 if not cross_valid:
