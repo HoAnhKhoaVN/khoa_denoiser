@@ -13,13 +13,11 @@ import time
 
 import torch
 import torch.nn.functional as F
-from utils import knowledge_distillation_loss
-
 from . import augment, distrib, pretrained
 from .enhance import enhance
 from .evaluate import evaluate
 from .stft_loss import MultiResolutionSTFTLoss
-from .utils import bold, copy_state, pull_metric, serialize_model, swap_state, LogProgress
+from .utils import bold, copy_state, pull_metric, serialize_model, swap_state, LogProgress, knowledge_distillation_loss
 
 logger = logging.getLogger(__name__)
 

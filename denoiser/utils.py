@@ -25,8 +25,10 @@ def knowledge_distillation_loss(student_outputs, teacher_outputs, T=1.0, alpha=0
     :param alpha: Weight of the KL divergence term (default: 0.5)
     """
     
-    kd_loss = nn.KLDivLoss()(nn.functional.log_softmax(student_outputs / T, dim=1),
-                             nn.functional.softmax(teacher_outputs / T, dim=1)) * (alpha * T * T)
+    kd_loss = torch.nn.KLDivLoss()(
+        torch.nn.functional.log_softmax(student_outputs / T, dim=1),
+        torch.nn.functional.softmax(teacher_outputs / T, dim=1)
+        ) * (alpha * T * T)
     return kd_loss
 
 def capture_init(init):

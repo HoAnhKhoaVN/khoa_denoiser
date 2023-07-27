@@ -39,6 +39,15 @@ def run(args):
         if hasattr(model, 'valid_length'):
             field = model.valid_length(1)
             logger.info('Field: %.1f ms', field / args.sample_rate * 1000)
+
+        # region Show teacher model
+        logger.info(teacher_model)
+        mb = sum(p.numel() for p in teacher_model.parameters()) * 4 / 2**20
+        logger.info('Size: %.1f MB', mb)
+        if hasattr(teacher_model, 'valid_length'):
+            field = teacher_model.valid_length(1)
+            logger.info('Field: %.1f ms', field / args.sample_rate * 1000)
+        # endregion
         return
 
     assert args.batch_size % distrib.world_size == 0
@@ -71,6 +80,7 @@ def run(args):
 
     if torch.cuda.is_available():
         model.cuda()
+        teacher_model.cuda()
 
     # optimizer
     if args.optim == "adam":
