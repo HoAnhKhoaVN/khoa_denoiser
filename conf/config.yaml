@@ -55,12 +55,12 @@ loss: l1
 stft_loss: False
 stft_sc_factor: .5
 stft_mag_factor: .5
-kd_loss: False
 epochs: 500
 batch_size: 64
 
 
 # region KD loss
+kd_loss: True
 kd_t_factor: 1
 kd_loss_factor: 100
 # endregion

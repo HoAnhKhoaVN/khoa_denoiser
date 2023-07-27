@@ -245,7 +245,7 @@ class Solver(object):
                         T = self.args.kd_t_factor,
                         alpha= self.args.kd_loss_factor,
                     )
-                    logger.info(f"===== KD LOSS : {kd_loss} ======")
+                    # logger.info(f"===== KD LOSS : {kd_loss} ======")
                     loss += kd_loss
 
                 # optimize model in training mode

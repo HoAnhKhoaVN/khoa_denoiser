@@ -1,8 +1,8 @@
 dset:
-  train: egs/valentini/tr
-  valid: egs/valentini/cv
-  test: egs/valentini/tt
-  noisy_json: egs/valentini/ts/noisy.json
+  train: /content/valentini/train
+  valid: /content/valentini/valid
+  test: /content/valentini/test
+  noisy_json: /content/valentini/test/noisy.json
   noisy_dir:
   matching: sort
 pesq: 1
