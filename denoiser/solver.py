@@ -24,12 +24,23 @@ logger = logging.getLogger(__name__)
 
 
 class Solver(object):
-    def __init__(self, data, model, optimizer, args):
+    def __init__(
+        self,
+        data,
+        teacher_model,
+        model,
+        optimizer,
+        args
+    ):
         self.tr_loader = data['tr_loader']
         self.cv_loader = data['cv_loader']
         self.tt_loader = data['tt_loader']
+        self.teacher_model = teacher_model
         self.model = model
+
         self.dmodel = distrib.wrap(model)
+        self.dteacher_model = distrib.wrap(teacher_model)
+        
         self.optimizer = optimizer
 
         # data augment

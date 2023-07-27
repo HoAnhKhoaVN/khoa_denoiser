@@ -12,6 +12,7 @@ import os
 import hydra
 
 from denoiser.executor import start_ddp_workers
+from denoiser.pretrained import master64
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ def run(args):
     # torch also initialize cuda seed if available
     torch.manual_seed(args.seed)
 
+    teacher_model = master64()
     model = Demucs(**args.demucs, sample_rate=args.sample_rate)
 
     if args.show:
@@ -51,6 +53,8 @@ def run(args):
     # Building datasets and loaders
     tr_dataset = NoisyCleanSet(
         args.dset.train, length=length, stride=stride, pad=args.pad, **kwargs)
+    
+    print
     tr_loader = distrib.loader(
         tr_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     if args.dset.valid:
