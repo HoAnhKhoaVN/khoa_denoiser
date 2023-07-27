@@ -80,7 +80,7 @@ def run(args):
         os._exit(1)
 
     # Construct Solver
-    solver = Solver(data, model, optimizer, args)
+    solver = Solver(data,teacher_model, model, optimizer, args)
     solver.train()
 
 
